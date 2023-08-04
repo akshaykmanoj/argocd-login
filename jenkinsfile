@@ -13,8 +13,7 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git-key', url: 'https://github.com/akshaykmanoj/argocd-login.git']])
             }
         }
-    }
-    stage('docker login build push and logout')  {
+        stage('docker login build push and logout')  {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'docker-pass', usernameVariable: 'docker-user')]) {
 
@@ -25,4 +24,5 @@ pipeline {
                 }
             }
         }
+}
 }
