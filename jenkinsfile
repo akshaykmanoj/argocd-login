@@ -16,6 +16,11 @@ pipeline {
                 }
             }
         }
+        stage('delete images') {
+            steps {
+                sh "docker rmi akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
+            }
+        }
         stage('replace himage tag ') {
             steps {
                 sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
