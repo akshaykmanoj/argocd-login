@@ -14,4 +14,15 @@ pipeline {
             }
         }
     }
+    stage('docker login build push and logout')  {
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-login', passwordVariable: 'docker-pass', usernameVariable: 'docker-user')]) {
+
+                    bat 'docker login -u %docker-user% -p %docker-pass%'
+                    bat "docker build -t  akshaykmanoj/my-django-login:${env.BUILD_NUMBER} . "
+                    bat "docker push akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
+                    bat 'docker logout'
+                }
+            }
+        }
 }
