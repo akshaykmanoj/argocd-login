@@ -15,8 +15,10 @@ pipeline {
         }
         stage('docker login build push and logout')  {
             steps{
-                withCredentials([usernamePassword(credentialsId: 'docker-key', passwordVariable: 'docker-pass', usernameVariable: 'docker-user')]) {
-                    sh 'docker login -u %docker-user% -p %docker-pass%'
+                withCredentials([usernamePassword(credentialsId: 'your-credentials-id', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+    sh "echo $DOCKER_PASS | docker --debug login -u $DOCKER_USER --password-stdin"
+}
+
                     
                 }
             }
