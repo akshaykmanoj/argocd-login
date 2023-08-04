@@ -18,6 +18,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-key', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                     sh "echo $DOCKER_PASS | docker --debug login -u $DOCKER_USER --password-stdin"
                     sh "docker build -t  akshaykmanoj/my-django-login:${env.BUILD_NUMBER} . "
+                    sh "docker push akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
                 }
             }
         }
