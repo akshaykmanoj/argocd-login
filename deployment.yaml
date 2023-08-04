@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-login-deployment
+  labels:
+    app: argo-login
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: argo-login
+  template:
+    metadata:
+      labels:
+        app: argo-login
+    spec:
+      containers:
+      - name: argo-login
+        image: akshaykmanoj/my-django-login
+        resourses:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
