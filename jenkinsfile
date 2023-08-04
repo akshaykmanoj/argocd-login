@@ -1,12 +1,5 @@
 pipeline {
     agent any
-    // environment {
-    //     build_number = "${env.BUILD_ID}"
-    //     AWS_ACCOUNT_ID="409######793"
-    //     AWS_DEFAULT_REGION="us-east-1"
-    //     IMAGE_REPO_NAME="registration-helm"
-    //     IMAGE_TAG="latest"
-    //     REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
     stages {
         stage('Checkout') {
             steps {
@@ -19,8 +12,10 @@ pipeline {
                     sh "echo $DOCKER_PASS | docker --debug login -u $DOCKER_USER --password-stdin"
                     sh "docker build -t  akshaykmanoj/my-django-login:${env.BUILD_NUMBER} . "
                     sh "docker push akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
+                    sh 'docker logout'
                 }
             }
         }
+        
 }
 }
