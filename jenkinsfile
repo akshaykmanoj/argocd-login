@@ -29,7 +29,7 @@ pipeline {
         }
         stage('helm package ') {
             steps {
-                sh 'helm package argo-helm'
+                sh 'helm package agro-helm'
             }
         } 
 }
