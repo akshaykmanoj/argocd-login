@@ -27,6 +27,10 @@ pipeline {
                 sh "cat deployment.yaml"
             }
         }
-        
+        stage('helm package ') {
+            steps {
+                sh 'helm package argo-helm'
+            }
+        } 
 }
 }
