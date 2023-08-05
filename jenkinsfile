@@ -21,7 +21,7 @@ pipeline {
                 sh "docker rmi akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
             }
         }
-        stage('replace himage tag ') {
+        stage('replace image tag ') {
             steps {
                 sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
                 sh "cat deployment.yaml"
@@ -32,5 +32,14 @@ pipeline {
                 sh 'helm package agro-helm'
             }
         } 
+        stage('Logging into AWS ECR & push helm chart to ecr') {
+            steps {
+                script {
+                 withCredentials([aws(credentialsId: 'aws-key', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {   
+                     sh 'aws ecr get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin 409486179793.dkr.ecr.us-east-1.amazonaws.com'                 }
+                }
+            }
+        }
+}
 }
 }
