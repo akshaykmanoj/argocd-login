@@ -10,7 +10,7 @@ pipeline {
             }
         }
         stage('Update GIT') {
-            script {
+            steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     withCredentials([gitUsernamePassword(credentialsId: 'git-key', gitToolName: 'Default')]){
                         //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
