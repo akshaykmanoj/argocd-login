@@ -23,8 +23,10 @@ pipeline {
         }
         stage('replace image tag ') {
             steps {
-                sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
-                sh "cat deployment.yaml"
+                //sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
+                //sh "cat deployment.yaml"
+                sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' ./agro-helm/values.yaml"
+                sh "cat ./agro-helm/values.yaml"
             }
         }
         stage('helm package ') {
