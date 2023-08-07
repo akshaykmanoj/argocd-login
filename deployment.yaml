@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: argo-login
-        image: akshaykmanoj/my-django-login:latest
+        image: akshaykmanoj/my-django-login:12
         resourses:
           limits:
             memory: "128Mi"
