@@ -11,22 +11,18 @@ pipeline {
         }
         stage('Update GIT') {
             steps {
-                //catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    withCredentials([gitUsernamePassword(credentialsId: 'git-key', gitToolName: 'Default')]){
-                        //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
-                        sh "git config user.email akshaykmanoj45@gmail.com"
-                        sh "git config user.name akshaykmanoj"
-                        //sh "git switch master"
-                        sh "cat deployment.yaml"
-                        sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
-                        sh "cat deployment.yaml"
-                        sh "git add ."
-                        sh "git commit -m 'Done by Jenkins Job changemanifest: ${env.BUILD_NUMBER}'"
-                        sh "git branch -M main"
-                        sh "git push -f https://github.com/akshaykmanoj/argocd-login.git main"
-                        }
-                    }
-              }
+                withCredentials([gitUsernamePassword(credentialsId: 'git-key', gitToolName: 'Default')]) {
+                    sh "git config user.email akshaykmanoj45@gmail.com"
+                    sh "git config user.name akshaykmanoj"
+                    sh "git checkout main" // Checkout the main branch
+                    sh "cat deployment.yaml"
+                    sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
+                    sh "cat deployment.yaml"
+                    sh "git add ."
+                    sh "git commit -m 'Done by Jenkins Job changemanifest: ${env.BUILD_NUMBER}'"
+                    sh "git push -f https://github.com/akshaykmanoj/argocd-login.git main"
+                }
+            }
         }
     }
 
