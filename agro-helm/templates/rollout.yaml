@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ template "agro-helm.fullname" . }}
+  labels:
+    app: {{ template "agro-helm.name" . }}
+    chart: {{ template "agro-helm.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ template "agro-helm.name" . }}
+      release: {{ .Release.Name }}
+      version: green  # Change this to blue when doing blue deployment
+  strategy:
+    blueGreen:
+      activeService: {{ template "agro-helm.fullname" . }}
+      previewService: {{ template "agro-helm.fullname" . }}-preview
+  template:
+    metadata:
+      labels:
+        app: {{ template "agro-helm.name" . }}
+        release: {{ .Release.Name }}
+        version: green  # Change this to blue when doing blue deployment
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
