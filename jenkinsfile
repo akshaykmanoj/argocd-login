@@ -13,21 +13,15 @@ pipeline {
                     sh "docker build -t  akshaykmanoj/my-django-login:${env.BUILD_NUMBER} . "
                     sh "docker push akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
                     sh 'docker logout'
+                    sh "docker rmi akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
                 }
             }
         }
-        stage('delete images') {
-            steps {
-                sh "docker rmi akshaykmanoj/my-django-login:${env.BUILD_NUMBER}"
-            }
-        }
+
         stage('replace image tag ') {
             steps {
                 sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' deployment.yaml"
-                sh "cat deployment.yaml"
                 //sh "sed -i 's|akshaykmanoj/my-django-login:latest|akshaykmanoj/my-django-login:${env.BUILD_NUMBER}|g' ./agro-helm/values.yaml"
-                //sh "sed -i 's|./agro-helm/values.yaml image.tag:latest|./agro-helm/values.yaml image.tag:${env.BUILD_NUMBER}|g' ./agro-helm/values.yaml"
-                //sh "cat ./agro-helm/values.yaml"
             }
         }
         stage('helm package ') {
@@ -46,11 +40,6 @@ pipeline {
             }
         }
     } 
-    stage('pass buildnumber to another pipeline') {
-            steps {
-                build job: 'argo-deploy-pipe', parameters: [string(name: 'build_number', value: "${build_number}")]
-            }
-        }
 }
 }
 
