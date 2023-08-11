@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
-  repository: akshaykmanoj/my-django-login
-  tag: latest
+  repository: your-image-repo
+  tag: your-image-tag
   pullPolicy: IfNotPresent
 resources: {}
 nodeSelector: {}
@@ -24,10 +24,10 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-  
 
 # Blue-Green Deployment Configuration
 blueGreen:
-  activeService: my-app  # Replace with your active service name
-  previewService: my-app-preview  # Replace with your preview service name
+  activeService: agro-helm  # Replace with your active service name
+  previewService: agro-helm-preview  # Replace with your preview service name
+
 
