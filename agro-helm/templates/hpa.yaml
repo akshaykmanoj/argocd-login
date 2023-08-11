@@ -1,0 +1,23 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "agro-helm.fullname" . }}
+  labels:
+    app: {{ template "agro-helm.name" . }}
+    chart: {{ template "agro-helm.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "agro-helm.fullname" . }}
+  minReplicas: 1
+  maxReplicas: 10  # Set your desired max replicas
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  # Set your desired average CPU utilization
