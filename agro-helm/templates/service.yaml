@@ -15,3 +15,22 @@ spec:
     app: {{ template "agro-helm.name" . }}
     release: {{ .Release.Name }}
     version: green  # Change this to blue when doing blue deployment
+
+    ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "agro-helm.fullname" . }}
+  labels:
+    app: {{ template "agro-helm.name" . }}
+    chart: {{ template "agro-helm.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+  selector:
+    app: {{ template "agro-helm.name" . }}
+    release: {{ .Release.Name }}
+    version: blue  # Change this to green when doing blue deployment
